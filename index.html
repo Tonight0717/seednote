@@ -1,7 +1,7 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f8f7f2"><title>씨앗노트 · 내 아이디어</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#f8f7f2;color:#263d34;font:16px/1.55 "Malgun Gothic",system-ui,sans-serif;word-break:keep-all;overflow-wrap:anywhere}header{border-bottom:1px solid #d8ded4;background:#fffefa}header>div,main{max-width:740px;margin:auto;padding:18px 22px}.brand{font-weight:850;letter-spacing:-1px;font-size:21px}.mark{display:inline-grid;place-items:center;background:#284d3e;color:#e1f396;border-radius:10px;width:34px;height:34px;margin-right:8px}.local{float:right;color:#516855;font-size:13px;padding-top:7px}main{padding-top:32px;padding-bottom:70px}.hero{position:relative;overflow:hidden;background:#dfe9ce;padding:28px;border-radius:20px}.hero:after{content:"";position:absolute;right:-45px;bottom:-84px;width:170px;height:170px;border:1px solid #abc099;border-radius:46% 52% 35% 55%;box-shadow:0 0 0 12px #dfe9ce,0 0 0 13px #b6c7a5,0 0 0 25px #dfe9ce,0 0 0 26px #beceaf;transform:rotate(24deg);pointer-events:none}.hero>*{position:relative;z-index:1}h1,h2,h3,p{margin:0}h1{font-size:clamp(29px,5vw,40px);letter-spacing:-2px}.hero p{margin:4px 0 20px;color:#465d49}button,select,input,textarea{font:inherit}button{cursor:pointer;border:1px solid #cbd4c7;background:#fffefa;color:#284738;border-radius:10px;padding:10px 15px;font-weight:700;min-height:44px}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #73914e;outline-offset:2px}.primary{background:#294d3d;color:white;border-color:#294d3d}.tabs{display:flex;gap:6px;margin:24px 0 16px;border-bottom:1px solid #cbd4c7}.tabs button{border:0;border-radius:0;background:none;color:#5b695d}.tabs [aria-pressed=true]{color:#224834;border-bottom:3px solid}.card,.empty{background:#fffefa;border:1px solid #d9ded4;border-radius:16px;padding:20px;margin:12px 0}.empty{text-align:center;padding:35px 16px}.empty p,.muted{color:#566659;font-size:14px}.card h3{font-size:22px;letter-spacing:-.7px}.card p{white-space:pre-wrap}.feature,.reason{margin:12px 0;padding:10px 12px;background:#f0f3e9;border-radius:8px}.reason{background:#fcf3dc}.label{display:block;font-size:12px;font-weight:bold;color:#56634f}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.chosen{font-size:13px;color:#32633d;font-weight:bold}.notice{color:#395a3d;font-size:14px}.notice:not(:empty){margin:14px 0}.notice button{margin-left:8px}dialog{width:min(510px,calc(100% - 24px));max-height:90dvh;border:1px solid #ccd4c6;border-radius:18px;padding:22px;color:inherit;background:#fffefa}dialog::backdrop{background:#1d312969}.top{display:flex;justify-content:space-between;align-items:center;gap:10px}.top button{font-size:19px}label{display:block;font-weight:700;margin-top:15px}input,textarea,select{display:block;width:100%;background:white;color:#263d34;border:1px solid #bac6b8;border-radius:9px;padding:10px;margin-top:5px}textarea{resize:vertical}.types{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0}.types button[aria-pressed=true]{background:#294d3d;color:white}#prompt{min-height:190px;font-size:15px}small{display:block;margin:22px 0;color:#627062}button:disabled{opacity:.65}
-#transfer{margin:18px 0;padding:14px 16px;border:1px solid #cbd4c7;border-radius:12px;background:#fffefa}summary{cursor:pointer;font-weight:700}#transfer p{margin-top:10px}#backupFile[hidden]{display:none}</style></head><body><header><div><span class="brand"><span class="mark" aria-hidden="true">✳</span>씨앗노트</span><span class="local">● 이 기기에 저장</span></div></header><main><section class="hero"><h1>내 아이디어 노트</h1><p>떠오른 앱 아이디어와 첫 기능을 적어 두세요.</p><button class="primary" id="add">＋ 아이디어 추가</button></section><nav class="tabs" aria-label="노트 보기"><button id="all">전체 메모</button><button id="rec">추천 보기</button></nav><div id="notice" class="notice" role="status"></div><section id="list"></section><small>메모는 이 브라우저에 저장돼요. 사이트 데이터를 지우면 메모도 지워져요.</small><details id="transfer"><summary>메모 한 번에 옮기기</summary>
+#transfer{margin:18px 0;padding:14px 16px;border:1px solid #cbd4c7;border-radius:12px;background:#fffefa}summary{cursor:pointer;font-weight:700}#transfer p{margin-top:10px}#backupFile[hidden]{display:none}</style></head><body><header><div><span class="brand"><span class="mark" aria-hidden="true">✳</span>씨앗노트</span><span class="local">● 이 기기에 저장</span></div></header><main><section class="hero"><h1>내 아이디어 노트</h1><p>떠오른 앱 아이디어와 첫 기능을 적어 두세요.</p><button class="primary" id="add">＋ 아이디어 추가</button></section><nav class="tabs" aria-label="노트 보기"><button id="all">전체 메모</button><button id="rec">추천 보기</button></nav><div id="notice" class="notice" role="status"></div><section id="list"></section><small>메모는 이 브라우저에 저장돼요. 사이트 데이터를 지우면 메모도 지워져요.</small><button hidden id="direct" class="primary">새 씨앗노트로 전부 옮기기</button><p id="directStatus" role="status"></p><details id="transfer"><summary>메모 한 번에 옮기기</summary>
 <p class="muted">예전 주소에서 파일로 저장한 뒤, 새 주소에서 같은 파일을 가져오세요. 저장 위치는 휴대폰 내부 폴더를 선택하세요.</p>
 <div class="actions"><button id="exportNotes">전체 메모 내보내기</button><button id="importNotes">파일 가져오기</button></div>
 <input id="backupFile" type="file" accept=".json,application/json" hidden><p id="transferStatus" role="status"></p></details>
@@ -78,7 +78,9 @@ $('exportNotes').onclick = () => {
 };
 $('importNotes').onclick = () => $('backupFile').click();
 function readBackup(text) {
- const data = JSON.parse(text);
+ return validateBackup(JSON.parse(text));
+}
+function validateBackup(data) {
  if (data?.format !== 'seednote' || data.version !== 1 || !Array.isArray(data.notes)) throw Error();
  const ids = new Set();
  const notes = data.notes.map(note => {
@@ -119,10 +121,15 @@ $('backupFile').onchange = async event => {
  let backup;
  try { backup = readBackup(await file.text()); }
  catch { transferStatus.textContent = '파일을 읽을 수 없어요. 씨앗노트에서 내보낸 JSON 파일을 선택하세요.'; return; }
+ applyBackup(backup,false);
+};
+function applyBackup(backup,directTransfer) {
+ const status = directTransfer ? $('notice') : transferStatus;
+ if (!storageOK) { status.textContent = '저장 공간을 확인한 뒤 다시 시도하세요.'; return false; }
  const {added, chosen} = mergeBackup(backup);
  if (!added.length && chosen === state.chosen) {
-  transferStatus.textContent = '추가할 메모가 없어요. 현재 메모를 그대로 유지했어요.';
-  return;
+  status.textContent = '추가할 메모가 없어요. 현재 메모를 그대로 유지했어요.';
+  return true;
  }
  const message = '메모 ' + added.length + '개를 추가했어요. 이미 있는 메모 ' + (backup.notes.length - added.length) + '개는 건너뛰었어요.';
  if (save({notes:[...state.notes, ...added], chosen}, message)) {
@@ -131,7 +138,88 @@ $('backupFile').onchange = async event => {
   transferStatus.textContent = '';
   $('transfer').open = false;
   $('notice').scrollIntoView({block:'center'});
- } else transferStatus.textContent = '저장 공간을 확인한 뒤 다시 가져오세요.';
+  return true;
+ }
+ status.textContent = '저장 공간을 확인한 뒤 다시 가져오세요.';
+ return false;
+}
+const publicNote = new URL('https://tonight0717.github.io/seednote/');
+function isOldAddress(origin) {
+ try {
+  const u = new URL(origin);
+  return u.protocol === 'http:' && u.port === '8734' &&
+   /^(localhost|127\.0\.0\.1|10\.\d+\.\d+\.\d+|192\.168\.\d+\.\d+|172\.(1[6-9]|2\d|3[01])\.\d+\.\d+|169\.254\.\d+\.\d+)$/.test(u.hostname);
+ } catch { return false; }
+}
+const direct = $('direct');
+direct.hidden = !isOldAddress(location.origin);
+direct.onclick = () => {
+ const status = $('directStatus');
+ if (!storageOK || !state.notes.length) {
+  status.textContent = '옮길 메모가 없어요. 예전 메모가 보이는 주소인지 확인하세요.';
+  return;
+ }
+ const ticket = Array.from(crypto.getRandomValues(new Uint8Array(16)), n=>n.toString(16).padStart(2,'0')).join('');
+ const popup = window.open(publicNote.href + '#move-' + ticket, '_blank');
+ if (!popup) { status.textContent = '새 탭이 차단됐어요. 이 주소의 팝업을 허용하고 다시 눌러 주세요.'; return; }
+ direct.disabled = true;
+ status.textContent = '새 씨앗노트가 열리고 있어요. 두 탭을 열어 두세요.';
+ const timer = setTimeout(()=>finish('저장 결과를 확인하지 못했어요. 새 주소를 확인한 뒤 다시 시도할 수 있어요.'),90000);
+ function finish(message) {
+  clearTimeout(timer);
+  window.removeEventListener('message', receive);
+  direct.disabled = false;
+  status.textContent = message;
+ }
+ function receive(e) {
+  if (e.source !== popup || e.origin !== publicNote.origin || e.data?.ticket !== ticket) return;
+  if (e.data.kind === 'seednote-ready') {
+   popup.postMessage({kind:'seednote-deliver',ticket,backup:{format:'seednote',version:1,notes:state.notes,chosen:state.chosen}}, publicNote.origin);
+  } else if (e.data.kind === 'seednote-stored') finish('옮기기가 끝났어요. 새 주소에서 메모를 확인하세요.');
+  else if (e.data.kind === 'seednote-failed') finish('저장하지 못했어요. 새 주소에서 저장 공간과 안내를 확인하세요.');
+ }
+ window.addEventListener('message',receive);
 };
+function receiveDirectTransfer() {
+ const match = /^#move-([a-f0-9]{32})$/.exec(location.hash);
+ if (location.origin !== publicNote.origin || location.pathname !== publicNote.pathname || !match) return;
+ const sender = window.opener, ticket = match[1];
+ history.replaceState(null,'',location.pathname);
+ if (!sender) { $('notice').textContent = '예전 탭과 연결되지 않았어요. 같은 브라우저에서 다시 시도하세요.'; return; }
+ $('notice').textContent = '예전 씨앗노트에서 메모를 받는 중이에요.';
+ function receive(e) {
+  if (e.source !== sender || !isOldAddress(e.origin) || e.data?.ticket !== ticket || e.data.kind !== 'seednote-deliver') return;
+  clearTimeout(timer);
+  window.removeEventListener('message', receive);
+  let stored = false;
+  try { stored = applyBackup(validateBackup(e.data.backup),true); }
+  catch { $('notice').textContent = '메모 형식을 확인할 수 없어 저장하지 못했어요.'; }
+  sender.postMessage({kind:stored?'seednote-stored':'seednote-failed',ticket},e.origin);
+  window.opener = null;
+ }
+ const timer = setTimeout(()=>{
+  window.removeEventListener('message',receive);
+  $('notice').textContent = '예전 탭과 연결되지 않았어요. 예전 주소에서 다시 눌러 주세요.';
+  window.opener = null;
+ },90000);
+ window.addEventListener('message',receive);
+ // Only the readiness signal goes to the opener. Notes travel to the fixed HTTPS origin.
+ sender.postMessage({kind:'seednote-ready',ticket},'*');
+}
+window.addEventListener('storage', event => {
+ if (event.storageArea !== localStorage || (event.key !== key && event.key !== null)) return;
+ try {
+  const latest = localStorage.getItem(key);
+  state = latest ? validateBackup({ ...JSON.parse(latest), format:'seednote', version:1 }) : {notes:[],chosen:null};
+  storageOK = true;
+  previous = null;
+  render();
+  $('notice').textContent = '다른 탭의 변경 내용을 반영했어요.';
+ } catch {
+  storageOK = false;
+  $('notice').textContent = '저장된 내용을 확인할 수 없어요. 페이지를 다시 열어 주세요.';
+ }
+});
+receiveDirectTransfer();
 </script></body></html>
 
