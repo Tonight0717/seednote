@@ -1,0 +1,58 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f8f7f2"><title>씨앗노트 · 내 아이디어</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f8f7f2;color:#263d34;font:16px/1.55 "Malgun Gothic",system-ui,sans-serif;word-break:keep-all;overflow-wrap:anywhere}header{border-bottom:1px solid #d8ded4;background:#fffefa}header>div,main{max-width:740px;margin:auto;padding:18px 22px}.brand{font-weight:850;letter-spacing:-1px;font-size:21px}.mark{display:inline-grid;place-items:center;background:#284d3e;color:#e1f396;border-radius:10px;width:34px;height:34px;margin-right:8px}.local{float:right;color:#516855;font-size:13px;padding-top:7px}main{padding-top:32px;padding-bottom:70px}.hero{position:relative;overflow:hidden;background:#dfe9ce;padding:28px;border-radius:20px}.hero:after{content:"";position:absolute;right:-45px;bottom:-84px;width:170px;height:170px;border:1px solid #abc099;border-radius:46% 52% 35% 55%;box-shadow:0 0 0 12px #dfe9ce,0 0 0 13px #b6c7a5,0 0 0 25px #dfe9ce,0 0 0 26px #beceaf;transform:rotate(24deg);pointer-events:none}.hero>*{position:relative;z-index:1}h1,h2,h3,p{margin:0}h1{font-size:clamp(29px,5vw,40px);letter-spacing:-2px}.hero p{margin:4px 0 20px;color:#465d49}button,select,input,textarea{font:inherit}button{cursor:pointer;border:1px solid #cbd4c7;background:#fffefa;color:#284738;border-radius:10px;padding:10px 15px;font-weight:700;min-height:44px}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #73914e;outline-offset:2px}.primary{background:#294d3d;color:white;border-color:#294d3d}.tabs{display:flex;gap:6px;margin:24px 0 16px;border-bottom:1px solid #cbd4c7}.tabs button{border:0;border-radius:0;background:none;color:#5b695d}.tabs [aria-pressed=true]{color:#224834;border-bottom:3px solid}.card,.empty{background:#fffefa;border:1px solid #d9ded4;border-radius:16px;padding:20px;margin:12px 0}.empty{text-align:center;padding:35px 16px}.empty p,.muted{color:#566659;font-size:14px}.card h3{font-size:22px;letter-spacing:-.7px}.card p{white-space:pre-wrap}.feature,.reason{margin:12px 0;padding:10px 12px;background:#f0f3e9;border-radius:8px}.reason{background:#fcf3dc}.label{display:block;font-size:12px;font-weight:bold;color:#56634f}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.chosen{font-size:13px;color:#32633d;font-weight:bold}.notice{color:#395a3d;font-size:14px}.notice:not(:empty){margin:14px 0}.notice button{margin-left:8px}dialog{width:min(510px,calc(100% - 24px));max-height:90dvh;border:1px solid #ccd4c6;border-radius:18px;padding:22px;color:inherit;background:#fffefa}dialog::backdrop{background:#1d312969}.top{display:flex;justify-content:space-between;align-items:center;gap:10px}.top button{font-size:19px}label{display:block;font-weight:700;margin-top:15px}input,textarea,select{display:block;width:100%;background:white;color:#263d34;border:1px solid #bac6b8;border-radius:9px;padding:10px;margin-top:5px}textarea{resize:vertical}.types{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0}.types button[aria-pressed=true]{background:#294d3d;color:white}#prompt{min-height:190px;font-size:15px}small{display:block;margin:22px 0;color:#627062}button:disabled{opacity:.65}
+</style></head><body><header><div><span class="brand"><span class="mark" aria-hidden="true">✳</span>씨앗노트</span><span class="local">● 이 기기에 저장</span></div></header><main><section class="hero"><h1>내 아이디어 노트</h1><p>떠오른 앱 아이디어와 첫 기능을 적어 두세요.</p><button class="primary" id="add">＋ 아이디어 추가</button></section><nav class="tabs" aria-label="노트 보기"><button id="all">전체 메모</button><button id="rec">추천 보기</button></nav><div id="notice" class="notice" role="status"></div><section id="list"></section><small>메모는 이 브라우저에 저장돼요. 사이트 데이터를 지우면 메모도 지워져요.</small></main>
+<dialog id="editor"><form id="form"><div class="top"><h2 id="editTitle">아이디어 추가</h2><button type="button" aria-label="닫기" data-close>×</button></div><label>제목<input id="titleField" required placeholder="예: 냉장고 메모"></label><label>한 줄 설명<input id="desc" required placeholder="누구에게 어떤 도움이 되나요?"></label><label>첫 기능<textarea id="feature" required rows="3" placeholder="처음 만들 기능 하나를 적어 주세요"></textarea></label><p id="editError" role="alert"></p><div class="actions"><button class="primary">저장하기</button><button type="button" data-close>취소</button></div></form></dialog>
+<dialog id="builder" aria-labelledby="buildTitle"><div class="top"><h2 id="buildTitle">만들기 프롬프트</h2><button data-close aria-label="닫기">×</button></div><p id="subject"></p><div class="types" id="types"></div><p class="muted" id="hint">어떤 형태로 만들까요?</p><div id="settings"></div><div id="result" hidden><label>코딩 도구에 붙여 넣을 프롬프트<textarea id="prompt" readonly></textarea></label><div class="actions"><button class="primary" id="copy">프롬프트 복사</button></div><p role="status" id="copyStatus"></p></div></dialog>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const key='seednote-v1';
+let state={notes:[],chosen:null}, recommended=false, editing=null, candidate=null, type='', previous=null, storageOK=true;
+try{const saved=localStorage.getItem(key);if(saved){state=JSON.parse(saved);if(!Array.isArray(state.notes)||!state.notes.every(n=>n&&['id','title','desc','feature'].every(k=>typeof n[k]==='string')))throw Error()}}
+catch{state={notes:[],chosen:null};storageOK=false;$('notice').textContent='저장 공간을 읽지 못했어요. 브라우저의 저장 설정을 확인해 주세요.'}
+function el(tag,cls,txt){const e=document.createElement(tag);e.className=cls;e.textContent=txt;return e}
+function button(txt,fn,cls=''){const b=el('button',cls,txt);b.type='button';b.onclick=fn;return b}
+function save(next,message,undo=false){
+ try{if(!storageOK)throw Error();localStorage.setItem(key,JSON.stringify(next))}
+ catch{$('notice').textContent=$('editError').textContent='저장할 수 없어요. 브라우저 저장 공간을 확인해 주세요.';return false}
+ previous=undo?null:state;state=next;render();$('notice').textContent=message;
+ if(previous)$('notice').append(button('되돌리기',()=>save(previous,'직전 변경을 되돌렸어요.',true)));return true
+}
+function assess(n){
+ const s=n.feature;
+ if(/실시간|동기화|친구.*공유|초대|함께 수정|공동 편집|결제|서버|로그인/.test(s))return [1,'여러 기기 연결이나 외부 서비스가 필요할 수 있어 준비할 일이 더 있어요.'];
+ if(/AI|인공지능|분석|자동 추천/i.test(s))return [0,'판단할 정보가 부족해요. 어떤 입력으로 어떤 결과를 낼지 구체화해 보세요.'];
+ const m=s.match(/기록|저장|입력|추가|체크|계산|목록|타이머|카운트/);
+ return m?[2,'첫 기능에 ‘'+m[0]+'’이 있어요. 이 동작부터 한 기기에서 작게 시험해 볼 수 있어요.']:[0,'판단할 정보가 부족해요. 사용자가 할 첫 동작을 적어 보세요.']
+}
+function render(){
+ $('all').textContent='전체 메모 '+state.notes.length;
+ $('all').setAttribute('aria-pressed',!recommended);$('rec').setAttribute('aria-pressed',recommended);
+ const list=$('list');list.replaceChildren();
+ if(!state.notes.length){const box=el('div','empty','');box.append(el('h3','','아직 아이디어가 없어요'),el('p','','위의 ‘아이디어 추가’로 첫 메모를 남겨 보세요.'));list.append(box);return}
+ const notes=recommended?[...state.notes].sort((a,b)=>assess(b)[0]-assess(a)[0]).slice(0,3):state.notes;
+ if(recommended)list.append(el('p','muted','첫 기능을 작게 시험하기 쉬운 순서예요. 단서가 같으면 최근에 추가한 메모가 먼저 나와요.'));
+ for(const n of notes){const c=el('article','card','');if(state.chosen===n.id)c.append(el('div','chosen','✓ 먼저 만들 아이디어'));
+ c.append(el('h3','',n.title),el('p','',n.desc));const f=el('div','feature','');f.append(el('span','label','첫 기능'),el('p','',n.feature));c.append(f);
+ if(recommended)c.append(el('p','reason',assess(n)[1]));
+ const a=el('div','actions','');if(recommended)a.append(button('만들기 프롬프트 받기',()=>openBuilder(n),'primary'));
+ const pick=button(state.chosen===n.id?'선택됨':'먼저 만들기',()=>save({...state,chosen:n.id},'먼저 만들 아이디어를 선택했어요.'));pick.disabled=state.chosen===n.id;
+ a.append(pick,button('수정',()=>edit(n)));c.append(a);list.append(c)}
+}
+function edit(n){editing=n?.id??null;$('editTitle').textContent=n?'아이디어 수정':'아이디어 추가';$('titleField').value=n?.title??'';$('desc').value=n?.desc??'';$('feature').value=n?.feature??'';$('editError').textContent='';$('editor').showModal();$('titleField').focus()}
+$('add').onclick=()=>edit(null);
+$('form').onsubmit=e=>{e.preventDefault();const fields=['titleField','desc','feature'];for(const id of fields){if(!$(id).value.trim()){$('editError').textContent='빈칸에 내용을 입력해 주세요.';$(id).focus();return}}
+const n={id:editing??Date.now().toString(36)+Math.random().toString(36).slice(2),title:$('titleField').value.trim(),desc:$('desc').value.trim(),feature:$('feature').value.trim()};
+const notes=editing?state.notes.map(old=>old.id===editing?n:old):[n,...state.notes];if(save({...state,notes},'메모를 저장했어요.'))$('editor').close()};
+$('all').onclick=()=>{recommended=false;render()};$('rec').onclick=()=>{recommended=true;render()};
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>b.closest('dialog').close());
+const formats={'앱':{hint:'휴대폰에 설치해서 써요.',os:['안드로이드','아이폰'],task:'터치로 조작하는 모바일 앱',test:'선택한 휴대폰 환경에서 실행하고 터치 입력과 화면 이동을 확인해줘.'},'웹':{hint:'브라우저에서 주소를 열어 써요.',task:'작은 화면에서도 읽기 쉬운 반응형 웹',test:'휴대폰 너비에서 첫 기능을 실행하고 가로 스크롤 없이 조작되는지 확인해줘.'},'컴퓨터 프로그램':{hint:'컴퓨터에 설치해서 써요.',os:['윈도우','맥'],task:'창에서 실행하는 데스크톱 프로그램',test:'선택한 운영체제에서 실행하는 방법을 제시하고 키보드와 마우스로 첫 기능을 확인해줘.'}};
+function openBuilder(n){candidate=n;type='';$('subject').textContent=n.title;$('types').replaceChildren();$('settings').replaceChildren();$('hint').textContent='어떤 형태로 만들까요?';$('result').hidden=true;for(const t of Object.keys(formats)){const b=button(t,()=>choose(t));b.setAttribute('aria-pressed','false');$('types').append(b)}$('builder').showModal()}
+function choose(t){type=t;const f=formats[t];for(const b of $('types').children)b.setAttribute('aria-pressed',b.textContent===t);$('hint').textContent=f.hint;$('settings').replaceChildren();if(f.os){const label=el('label','','사용할 기기');const select=document.createElement('select');select.id='os';for(const os of f.os)select.add(new Option(os,os));select.onchange=makePrompt;label.append(select);$('settings').append(label)}makePrompt()}
+function makePrompt(){const f=formats[type],os=$('os')?.value;$('result').hidden=false;$('copyStatus').textContent='';$('prompt').value=['나는 개발 초보자야. 아래 아이디어로 '+(os?os+'용 ':'')+f.task+'을 만들어줘.','','제목: '+candidate.title,'한 줄 설명: '+candidate.desc,'첫 기능: '+candidate.feature,'','첫 버전은 위 첫 기능을 처음부터 끝까지 사용할 수 있는 범위로 만들어줘. 무료로 구현할 방법을 우선하고, 비용이 꼭 필요하면 진행 전에 알려줘.','첫 기능에 맞는 예시 입력과 기대 결과를 정하고 실제 결과와 비교해줘.',f.test,'실제로 검사한 부분과 아직 확인하지 못한 부분을 구분하고, 내가 직접 실행하고 되돌리는 방법을 쉽게 알려줘.'].join('\n')}
+$('copy').onclick=async()=>{const area=$('prompt');let copied=false;try{await navigator.clipboard.writeText(area.value);copied=true}catch{area.focus();area.select();try{copied=document.execCommand('copy')}catch{}}
+$('copyStatus').textContent=copied?'복사했어요. 코딩 도구에 붙여 넣으세요.':'문구를 선택했어요. 길게 눌러 복사를 선택하세요.'};
+render();
+</script></body></html>
+
